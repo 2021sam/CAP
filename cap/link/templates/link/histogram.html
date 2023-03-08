@@ -1,0 +1,92 @@
+<html>
+<body id='results'>
+
+<h1>Linked</h1>
+<table style="width: 99%;" class="table table-hover">
+	<tbody>
+	<tr>
+	<td style="width: 1%;">&nbsp;</td>
+	<td style="width: 15%;">CC ID &nbsp;</td>
+	<td style="width:  5%;">Posted Date</td>
+	<td style="width: 20%;">Vendor</td>
+	<td style="width: 10%;">Address</td>
+	<td style="width: 3%;">Amount</td>
+
+	<td style="width: 1%;">Log ID</td>
+	<td style="width: 3%;">Purchaser</td>
+	<td style="width: 3%;">RO</td>
+	<td style="width: 3%;">Invoice</td>
+	</tr>
+
+
+{% for i in transactions %}
+{% if i.log_id %}
+<tr>
+	<td style="width: 1%; text-align:right">&nbsp;
+		<!-- <input type="radio" id="choice{{ i.cc_id }}" name="choice" value="[{{ log_id }}, {{ i.cc_id }}]" onchange='myFunction( this, "{{ i.cc_id }}", {{ i.log_id }} )'> -->
+	</td>
+	<td style="width: 15%;">{{ i.cc_id }}</td>
+	<td style="width:  5%;">{{ i.posted_date }}</td>
+	<td style="width: 20%;">{{ i.payee }}</td>
+	<td style="width: 10%;">{{ i.address }}</td>
+	<td style="width: 3%;">{{ i.amount }}</td>
+	<td style="width: 1%;">{{ i.log_id }}</td>
+	<td style="width: 3%;">{{ i.user_id }}</td>
+	<td style="width: 3%;">{{ i.ro }}</td>
+	<td style="width: 3%;">{{ i.invoice }}&nbsp;</td>
+</tr>
+	{% endif %}
+	{% endfor %}
+	</tbody>
+</table>
+
+<h1>Not Linked</h1>
+<table style="width: 99%;" class="table table-hover">
+	<tbody>
+	<tr>
+	<td style="width: 1%;">&nbsp;</td>
+	<td style="width: 15%;">CC ID &nbsp;</td>
+	<td style="width:  5%;">Posted Date</td>
+	<td style="width: 20%;">Vendor</td>
+	<td style="width: 10%;">Address</td>
+	<td style="width: 3%;">Amount</td>
+	<td style="width: 1%;">Log ID</td>
+	<td style="width: 3%;">Purchaser</td>
+	<td style="width: 3%;">RO</td>
+	<td style="width: 3%;">Invoice</td>
+	</tr>
+
+
+{% for i in transactions %}
+{% if i.log_id == 0 %}
+<tr>
+	<td style="width: 1%; text-align:right">&nbsp;
+		<!-- <input type="radio" id="choice{{ i.cc_id }}" name="choice" value="[{{ log_id }}, {{ i.cc_id }}]" onchange='myFunction( this, "{{ i.cc_id }}", {{ i.log_id }} )'> -->
+	</td>
+	<td style="width: 15%;">{{ i.cc_id }}</td>
+	<td style="width:  5%;">{{ i.posted_date }}</td>
+	<td style="width: 20%;">{{ i.payee }}</td>
+	<td style="width: 10%;">{{ i.address }}</td>
+	<td style="width: 3%;">{{ i.amount }}</td>
+	<td style="width: 1%;">{{ i.log_id }}</td>
+	<td style="width: 3%;">{{ i.user_id }}</td>
+	<td style="width: 3%;">{{ i.ro }}</td>
+	<td style="width: 3%;">{{ i.invoice }}&nbsp;</td>
+</tr>
+	{% endif %}
+	{% endfor %}
+	</tbody>
+</table>
+
+Count: {{ count }}<br>
+Total: {{ total_cost }}<br>
+<p>
+	Review of Credit Card Days Back: {{ cc_days_back }}<br>
+	Log Date to Credit Card Process Date Offset: {{ offset_days }}<br>
+<p>
+	Histogram<br>
+	{% for key, value in d.items %}
+	{{ key }}: {{ value }}<br>
+	{% endfor %}
+</body>
+</html>

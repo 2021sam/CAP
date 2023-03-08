@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=.8"/>
+	<title>{% block title %} Bootstrap Title {% endblock %}</title>
+	<style>
+		#id_log_id {
+			width: 70px;
+		}
+		#id_user_id {
+			width: 100px;
+		}
+		#id_transaction_date {
+			width: 100px;
+		}
+		#vendor{
+			width:400px;
+		}
+		#id_amount {
+			width: 100px;
+		}
+		#id_ro1 {
+			width: 80px;
+		}
+		#id_ro2 {
+			width: 80px;
+		}
+		#id_ro3 {
+			width: 80px;
+		}
+		#id_ro4 {
+			width: 80px;
+		}
+		#id_ro5 {
+			width: 80px;
+		}
+		#id_invoice {
+			width: 200px;
+		}
+
+		#vendor {
+			width: 700px;
+		}
+
+
+		#page td {
+			padding: 0; 
+			margin: 0;
+		}
+
+		.table { 
+			border-spacing: 0;
+			border-collapse: collapse;
+		}
+
+	.noBorder {
+    border: 0px;
+    padding:0; 
+    margin:0;
+    border-collapse: collapse;
+}
+
+	.table-hover tbody tr:hover td, .table-hover tbody tr:hover th
+	{
+		/* background-color:rgb(178, 195, 243); */
+		/* background-color:deepskyblue; */
+		/* background-color:steelblue; */
+		background-color:lightblue;
+		border-spacing: 0 !important;
+		border-collapse: collapse !important;
+	}
+	</style>
+
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.24/b-1.7.0/b-html5-1.7.0/b-print-1.7.0/date-1.0.3/kt-2.6.1/datatables.min.css"/>
+ 
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.24/b-1.7.0/b-html5-1.7.0/b-print-1.7.0/date-1.0.3/kt-2.6.1/datatables.min.js"></script>
+
+
+<script>
+		$(document).ready(function()
+		{
+			$('#table_id').DataTable(
+				{
+					dom: 'Bfrltipl',
+					buttons: [
+						'copy', 'csv', 'excel', 'pdf', 'print'
+					],
+					pageLength: 10,
+    				lengthMenu: [0, 5, 10, 20, 50, 100, 200, 500],
+				});
+
+		} );
+		
+	</script>
+
+
+</head>
+<body>
+	<nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
+		<a href='#' class='navbar-brand'>CC Log</a>
+		<button class='navbar-toggler' data-toggle='collapse' data-target="#navbarMenu">
+			<span class='navbar-toggler-icon'></span>
+		</button>
+		<div class='collapse navbar-collapse' id="navbarMenu">
+			<ul class='navbar-nav'>
+				<li class='nav-item'>
+					<a href="{% url 'cclog:logs' %}" class='nav-link'>List</a>
+				</li>
+				
+				{%	if user.is_superuser or request.user.username == 'sam' or request.user.username == 'ghost' or request.user.username == 'lynnette' %}
+					<li class='nav-item'>
+						<a href="{% url 'cclog:logs2' %}" class='nav-link'>Linked</a>
+					</li>
+				{% endif %}
+
+				<li class='nav-item'>
+					<a href='{% url "cclog:log" %}' class='nav-link'>Log</a>
+				</li>
+
+				<li class='nav-item'>
+					<a href='../../accounts/logout' class='nav-link'>Log Out</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+{% block content %}
+{% endblock %}
+</body>

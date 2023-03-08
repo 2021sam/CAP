@@ -1,0 +1,73 @@
+{% extends "cclog/boot.html" %}
+{% block title %} Update Log {% endblock %}
+
+{% block content %}
+
+<script>
+	function msg()
+	{
+		vendor = document.getElementById("vendor").value;
+		//   alert("Any changes will not be saved.");
+		window.location.href = "../../cc/?posted_date=&payee=&address=&amount=&logid={{ i.log_id }}&payee=" + vendor + "&auto=submit";
+	}
+
+	function updateVendorName( vendor )
+	{
+		const varray = vendor.split(" ");
+		vid = parseInt( varray.shift() );		//	→ blanks to Nan
+		document.getElementById('id_vendor_id').value = 0;
+		// alert( vid )
+		// alert( typeof( i ) );
+		// if ( ! isNaN( i ) )
+		if ( Number.isInteger( vid ) )
+		{
+			// alert( vid )
+			document.getElementById('id_vendor_id').value = vid;
+			document.getElementById('vendor').value = vendor.substr( vendor.indexOf(" ") + 1);
+		}
+	}
+
+</script>
+
+<div class="content-section">
+	<legend class="border-bottom mb-4">Update Log</legend>
+	<form method="POST" enctype='multipart/form-data' action="{% url 'cclog:update_save' i.log_id %}">
+
+	{% csrf_token %}
+	<!-- {{ form.as_p }} -->
+
+<table>
+	<tbody>
+		{% for f in form %}
+		<tr>
+			<td>
+				{{ f.label_tag }}
+			</td>
+			<td>
+				{% if f.html_name == 'vendor' %}
+				<input list="vendors_list" id="vendor" name="vendor" autocomplete="off" value='{{ i.vendor }}' oninput="updateVendorName( this.value )">
+				<datalist id="vendors_list" >
+					{% for v in vendors %}
+						<option value='{{ v.vendor_id }} {{ v.name }}'>{{ v.name }} {{ v.address }} {{ v.city }} {{v.phone}} {{ v.firstname }}</option>
+					{% endfor %}
+				</datalist>
+				{% else %}
+					{{ f }}
+				{% endif %}						
+			</td>
+			<td>
+
+				{% if f.html_name == 'cc_id_key' %}
+					<input type='button' class="btn btn-outline-info" value='Search' onclick="msg()">
+				{% endif %}
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+		<button type="submit" class="btn btn-outline-info">
+			Update
+		</button>
+	</form>
+</div>
+{% endblock %}

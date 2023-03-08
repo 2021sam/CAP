@@ -1,0 +1,125 @@
+{% extends "cclog/boot.html" %}
+{% block content %}
+
+<h1>Credit Card Log</h1>
+<form method='GET'>
+	{{ transactions.form.as_table }}
+	<button type='submit' class='btn btn-primary'>Search</button>
+</form>
+
+<form method="POST" action="{% url 'cclog:update' %}">
+{% csrf_token %}
+
+
+<table id='table_id' class='display' align="center" width=99% >
+	<thead>
+	<tr>
+		<th>&nbsp;</th>
+		<th>ID</th>
+		<th>Buyer</th>
+		<th>Transaction Date</th>
+		<th>Vendor</th>
+		
+		<th>Amount</th>
+		<th>RO</th>
+		<th>Invoice</th>
+		<th>RCVC</th>
+		{% if user.is_superuser or request.user.username == 'sam' %}
+			<th>CC Transaction</th>
+			<th>CC Amount</th>
+			<th>PO ID</th>
+			<th>Date</th>
+			<th>Category</th>
+			<th>Vendor</th>
+			<th>Qty</th>
+
+			<th>Cost</th>
+			<th>Price</th>
+			<th>CVC</th>
+
+<!-- 
+			<td style="width: 1%;">Start</td>
+			<td style="width: 1%;">Stop</td> -->
+		{% endif %}
+
+	</tr>
+	</thead>
+	<tbody>
+{% for i in transactions.qs %}
+<tr>
+	<td style="width: 1%; text-align:right">&nbsp;
+		<input type="radio" id="choice{{ i.log_id }}" name="choice" value="{{ i.log_id }}" onchange='this.form.submit()'></td>
+	<td style="width: 1%;">{{ i.log_id }}</td>
+	<td style="width: 1%;">{{ i.user_id }}</td>
+	<td style="width: 3%;">{{ i.transaction_date }}</td>
+	<td style="width: 10%;">{{ i.vendor }}</td>
+
+	<td style="width: 1%;" align='right'>{{ i.amount|floatformat:2 }}</td>
+	<td style="width: 1%;">
+		{% if i.ro1 > 0 %} {{ i.ro1 }} {% endif %}
+		{% if i.ro2 > 0 %} {{ i.ro2 }} {% endif %}
+		{% if i.ro3 > 0 %} {{ i.ro3 }} {% endif %}
+		{% if i.ro4 > 0 %} {{ i.ro4 }} {% endif %}
+		{% if i.ro5 > 0 %} {{ i.ro5 }} {% endif %}
+		</td>
+	<td style="width: 3%;">{{ i.invoice }}&nbsp;</td>
+	<td style="width: 1%;">
+		{{ i.returned|yesno:'Y,N' }}{{ i.credit|yesno:'Y,N' }}{{ i.voided|yesno:'Y,N' }}{{ i.closed|yesno:'Y,N' }}
+	</td>
+	{% if user.is_superuser or request.user.username == 'sam' %}
+		<td style="width: 1%;">
+			{{ i.cc_id_key.cc_id }} {{ i.cc_id_key.posted_date }} {{ i.cc_id_key.payee }}
+		</td>
+		<td style="width: 2%;" align='right'>{{ i.cc_id_key.amount|floatformat:2 }}</td>
+		<td style="width: 1%;">
+			{% for po in i.po.all %}
+				{{ po.po_id }}<br>
+			{% endfor %}
+		</td>
+		<td style="width: 2%;">{{ i.po.first.date }}</td>
+		<td style="width: 4%;">
+			{% for po in i.po.all %}
+				{% if po.category == 'Parts New' %}
+					Parts_New<br>
+				{% else %}
+					{{ po.category }}<br>
+				{% endif %}
+			{% endfor %}		
+		</td>
+		<td style="width: 2%;">{{ i.po.first.vendor }}</td>
+		<td style="width: 2%;">
+			{% for po in i.po.all %}
+				{{ po.qty }}<br>
+			{% endfor %}
+		</td>
+		<td style="width: 1%;" align='right'>
+			{% for po in i.po.all %}
+				{{ po.cost|floatformat:2 }}<br>
+			{% endfor %}
+			{{ i.po_cost|floatformat:2 }}
+		</td>
+		<td style="width: 1%;" align='right'>
+			{% for po in i.po.all %}
+				{{ po.price|floatformat:2 }}<br>
+			{% endfor %}
+			{{ i.po_price|floatformat:2 }}
+		</td>
+		<td style="width: 1%;">
+		{% for po in i.po.all %}
+			{{ po.credit }}{{ po.voided }}{{ po.closed }}<br>
+		{% endfor %}
+		</td>
+
+		<!-- <td style="width: 1%;">{{ i.start }}</td>
+		<td style="width: 1%;">{{ i.stop }}</td> -->
+	{% endif %}
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+
+
+Count: {{count}}<br>
+RCVC → Returned, Credit, Voided, Closed
+{% endblock %}

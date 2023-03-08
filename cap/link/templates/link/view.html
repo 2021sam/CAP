@@ -1,0 +1,75 @@
+{% extends "cc/boot.html" %}
+{% block content %}
+
+<h1>Credit Card Transactions</h1>
+
+<form method='GET'>
+	{{ transactions.form.as_table }}
+
+	<label for="link">Link status:</label>
+	<select name="link" id="link">
+	  <option value="all" {{ link.0 }}>*</option>
+	  <option value="False" {{ link.1 }}>Not Linked</option>
+	  <option value="True" {{ link.2 }}>Linked</option>
+	</select>
+
+	<input type="hidden" name="logid" value={{ log_id }}>
+	<button type='submit' class='btn btn-primary'>Search</button>
+</form>
+
+
+
+
+<!-- <script>
+	function myFunction(that, cc_id, log_id)
+	{
+		if ( log_id )
+			// alert("The value is: " + that.value + " log_id: " + log_id );
+			alert( 'Credit card transaction ' + cc_id + ' has already been linked to log id ' + log_id );
+		else
+			that.form.submit();
+	}
+</script> -->
+
+
+
+<table style="width: 99%;" class="table table-hover">
+	<tbody>
+	<tr>
+	<td style="width: 1%;">&nbsp;</td>
+	<td style="width: 15%;">CC ID &nbsp;</td>
+	<td style="width:  5%;">Posted Date</td>
+	<td style="width: 20%;">Vendor</td>
+	<td style="width: 10%;">Address</td>
+	<td style="width: 3%;">Amount</td>
+
+	<td style="width: 1%;">Log ID</td>
+	<td style="width: 3%;">Purchaser</td>
+	<td style="width: 3%;">RO</td>
+	<td style="width: 3%;">Invoice</td>
+	</tr>
+
+
+{% for i in transactions %}
+<tr>
+	<td style="width: 1%; text-align:right">&nbsp;
+		<!-- <input type="radio" id="choice{{ i.cc_id }}" name="choice" value="[{{ log_id }}, {{ i.cc_id }}]" onchange='myFunction( this, "{{ i.cc_id }}", {{ i.log_id }} )'> -->
+	</td>
+	<td style="width: 15%;">{{ i.cc_id }}</td>
+	<td style="width:  5%;">{{ i.posted_date }}</td>
+	<td style="width: 20%;">{{ i.payee }}</td>
+	<td style="width: 10%;">{{ i.address }}</td>
+	<td style="width: 3%;">{{ i.amount }}</td>
+	<td style="width: 1%;">{{ i.log_id }}</td>
+	<td style="width: 3%;">{{ i.user_id }}</td>
+	<td style="width: 3%;">{{ i.ro }}</td>
+	<td style="width: 3%;">{{ i.invoice }}&nbsp;</td>
+</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+Count: {{ count }}<br>
+Total: {{ total_cost }}<br>
+
+{% endblock %}

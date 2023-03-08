@@ -1,0 +1,39 @@
+{% extends "cc/boot.html" %}
+
+{% block content %}
+<h1>Help Page</h1>
+
+<h3>Logging</h3>
+<p>Repair Centers Repair Order RO is referenced in the log as ro1, ro2, ...<br>
+BEAR's vendor invoice is referenced as <b>Invoice</b>.<br>
+You can only edit your own transactions.<br>
+An RO & invoice are required for a completed valid log.<br>
+Once you are done with creating and/or updating your log, you may <b>Close</b> it.<br></p>
+
+
+<h3>Manual CC Linking</h3>
+<p>
+The credit card transactions are automatically imported daily from the credit card bank website.<br>
+The credit card log field is linked to a credit card transaction with the following steps:<br>
+1.	Select a log to Update.<br>
+2.	Click the Search button.<br>
+3.	Select the corresponding credit card charge.<br>
+4.	Click the Update button.<br>
+        The credit card id is dependent on the credit card key → the credit card it will be erased if there is no credit card key selected.
+</p>
+
+
+
+<h3>Automatic CC Linking</h3>
+<p>
+The credit card transactions are automatically imported daily from the credit card bank website.<br>
+The credit card log field is linked to a credit card transaction automatically if the following criteria is met:<br>
+1.	The log was created no more than 10 days prior to the credit card transaction process date.<br>
+2.	The amounts match to the penny.<br>
+3.      There is a matching word in the log & credit card transaction for the vendor name.<br>
+</p>
+
+<h3>PO Linking</h3>
+The Purchase Orders are automatically linked when the RO's & the invoice in the log
+match the RO & invoice in Repair Center.
+{% endblock %}

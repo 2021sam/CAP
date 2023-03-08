@@ -1,0 +1,54 @@
+{% extends "../cc/boot.html" %}
+{% block content %}
+	<h1>Purchase Orders</h1>
+	<form method='GET'>
+		{{ transactions.form.as_p }}
+		<button type='submit' class='btn btn-primary'>Search</button>
+
+		<table style="border-collapse: collapse; width: 100%;" border="1">
+			<tbody>
+			<tr>
+			<td style="width: 1%;">UP_ID</td>
+			<td style="width: 2%;">RO_ID</td>
+			<td style="width: 2%;">Date</td>
+			<td style="width: 2%;">RO</td>
+			<td style="width: 3%;">Invoice</td>
+			<td style="width: 10%;">Category</td>
+			<td style="width: 40%;">Vendor</td>
+			<td style="width: 1%;">Qty</td>
+			<td style="width: 1%;">Price</td>
+			<td style="width: 1%;">Cost</td>
+			<td style="width: 10%;">TPCVC</td>
+			</tr>
+
+
+		{% for i in transactions.qs %}
+		<tr>
+			<td style="width: 1%;">
+				<!-- <input type="radio" id="choice{{ item.0 }}" name="choice" value="[{{item.0}}, {{item.6}}]" onchange='this.form.submit()'> -->
+				{{ i.up_id }}
+			</td>
+			<td style="width: 2%;">{{ i.ro_id }}</td>
+			<td style="width: 2%;">{{ i.date }}</td>
+			<td style="width: 2%;">{{ i.ro }}</td>
+			<td style="width: 3%;">{{ i.invoice }}</td>
+			<td style="width: 10%;">{{ i.category }}</td>
+			<td style="width: 40%;">{{ i.vendor }}</td>
+			<td style="width: 1%;">{{ i.qty }}</td>
+			<td style="width: 1%;">{{ i.price }}</td>
+			<td style="width: 1%;">{{ i.cost }}</td>
+			<td style="width: 10%;">{{ i.transferred }}{{ i.payables }}{{ i.credit }}{{ i.voided }}{{ i.closed }}</td>
+			</tr>
+			{% endfor %}
+
+			</tbody>
+		</table>
+		<button type='submit' class='btn btn-primary'>Search</button>
+	</form>
+
+	Count: {{ count }}<br>
+	Cost: {{ total_cost }}<br>
+	Price:{{ total_price }}<br>
+	TPCVC → Transferred, Payables, Credit, Voided, Closed
+
+{% endblock %}

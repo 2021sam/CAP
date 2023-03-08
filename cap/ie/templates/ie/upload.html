@@ -1,0 +1,33 @@
+{% extends "cc/boot.html" %}
+{% block content %}
+
+<form method='post' enctype="multipart/form-data">
+	{% csrf_token %}
+	<label>Upload a csv file:</label><br>
+	<input type='file' name='file'>
+	<p>Do you want to skip the first record?
+		<div>
+			<input type="radio" id="user" name="up_type" value="user">
+			<label for="user">User</label><br>
+
+			<input type="radio" id="log" name="up_type" value="log">
+			<label for="log">Log</label><br>
+
+			<input type="radio" id="po" name="up_type" value="po">
+			<label for="po">Purchase Order</label><br>
+			<input type="radio" id="cc" name="up_type" value="cc">
+			<label for="cc">Credit Card</label><br>
+			<input type="radio" id="vendor" name="up_type" value="vendor">
+			<label for="vendor">Vendor</label><br>
+
+			<a href="{% url 'ie:linker' %}" class='nav-link'>Linker</a>
+		</div>
+	</p>
+  <button type='submit'>Upload</button>
+</form>
+<h4 id='results'>
+	{{ message }}<br>
+	Duplicates Found {{ i_old }}<br>
+	New records added {{ i_new }}
+</h4>
+{% endblock %}

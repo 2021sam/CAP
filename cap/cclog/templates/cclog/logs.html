@@ -1,0 +1,75 @@
+{% extends "cclog/boot.html" %}
+{% block content %}
+
+<h1>Credit Card Log</h1>
+
+<form method='GET'>
+	{{ transactions.form.as_table }}
+	<button type='submit' class='btn btn-primary'>Search</button>
+</form>
+
+
+<form method="POST" action="{% url 'cclog:update' %}">
+{% csrf_token %}
+
+<table align="center" width=99% class="table table-hover">
+	<tbody>
+	<tr>
+		<td style="width: 1%;">&nbsp;</td>
+		<td style="width: 1%;">ID</td>
+		<td style="width: 5%;">Purchaser</td>
+		<td style="width: 3%;">Transaction Date</td>
+		<td style="width: 20%;">Vendor</td>
+		
+		<td style="width: 5%;">Amount</td>
+		<td style="width: 3%;">RO</td>
+		<td style="width: 5%;">Invoice</td>
+		<td style="width: 2%;">Returned</td>
+		<td style="width: 2%;">Credit</td>
+		<td style="width: 2%;">Voided</td>
+		<td style="width: 2%;">Closed</td>
+		{% if user.is_superuser or request.user.username == 'sam' %}
+			<td style="width: 1%;">CC Transaction</td>
+			<td style="width: 2%;">CC Amount</td>
+			<td style="width: 2%;">Timestamp Start</td>
+			<td style="width: 2%;">Timestamp Stop</td>
+		{% endif %}
+
+	</tr>
+
+{% for i in transactions.qs %}
+<tr>
+	<td style="width: 1%; text-align:right">&nbsp;
+		<input type="radio" id="choice{{ i.log_id }}" name="choice" value="{{ i.log_id }}" onchange='this.form.submit()'></td>
+	<td style="width: 1%;">{{ i.log_id }}</td>
+	<td style="width: 5%;">{{ i.user_id }}</td>
+	<td style="width: 3%;">{{ i.transaction_date }}</td>
+	<td style="width: 20%;">{{ i.vendor }}</td>
+	
+	<td style="width: 3%;">{{ i.amount }}</td>
+	<td style="width: 5%;">
+		{% if i.ro1 > 0 %} {{ i.ro1 }} {% endif %}
+		{% if i.ro2 > 0 %} {{ i.ro2 }} {% endif %}
+		{% if i.ro3 > 0 %} {{ i.ro3 }} {% endif %}
+		{% if i.ro4 > 0 %} {{ i.ro4 }} {% endif %}
+		{% if i.ro5 > 0 %} {{ i.ro5 }} {% endif %}
+		</td>
+	<td style="width: 5%;">{{ i.invoice }}&nbsp;</td>
+	<td style="width: 2%;">{{ i.returned }}</td>
+	<td style="width: 2%;">{{ i.credit }}</td>
+	<td style="width: 2%;">{{ i.voided }}&nbsp;</td>
+	<td style="width: 2%;">{{ i.closed }}&nbsp;</td>
+	{% if user.is_superuser or request.user.username == 'sam' %}
+		<td style="width: 1%;">
+			{{ i.cc_id.cc_id }} {{ i.cc_id.posted_date }} {{ i.cc_id.payee }}
+		</td>
+		<td style="width: 2%;">{{ i.cc_id.amount }}</td>
+		<td style="width: 2%;">{{ i.start }}</td>
+		<td style="width: 2%;">{{ i.stop }}</td>
+	{% endif %}
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
+Count: {{count}}<br>
+{% endblock %}

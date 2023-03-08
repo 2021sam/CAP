@@ -1,0 +1,4 @@
+ python -m pip install Django
+ pip install Django
+ pip install django-filter
+ pip install django-background-task

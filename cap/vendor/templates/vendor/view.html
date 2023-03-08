@@ -1,0 +1,57 @@
+{% extends "cc/boot.html" %}
+{% block content %}
+	<h1>Vendors</h1>
+	<form method='GET'>
+		{{ transactions.form.as_p }}
+		<button type='submit' class='btn btn-primary'>Search</button>
+
+		<table style="border-collapse: collapse; width: 100%;" border="1">
+			<tbody>
+				<tr>
+				<td style="width: {{ cw.0 }}%;">ID</td>
+				<td style="width: {{ cw.1 }}%;">Name</td>
+				<td style="width: {{ cw.2 }}%;">Alias</td>
+				<td style="width: {{ cw.3 }}%;">Address</td>
+				<td style="width: {{ cw.4 }}%;">City</td>
+				<td style="width: {{ cw.5 }}%;">State</td>
+				<td style="width: {{ cw.6 }}%;">Zip</td>
+				<td style="width: {{ cw.7 }}%;">First</td>
+				<td style="width: {{ cw.8 }}%;">Last</td>
+				<td style="width: {{ cw.9 }}%;">Phone</td>
+				<td style="width: {{ cw.10 }}%;">Email</td>
+				<td style="width: {{ cw.11 }}%;">Type</td>
+				<td style="width: {{ cw.12 }}%;">Inactive</td>
+				</tr>
+		{% for i in transactions.qs %}
+		<tr>
+			<!-- <td style="width: 1%;">
+				<input type="radio" id="choice{{ item.0 }}" name="choice" value="[{{item.0}}, {{item.6}}]" onchange='this.form.submit()'>
+				{{ i.up_id }} For security reasons -->
+			</td>
+			<td style="width: {{ cw.0 }}%;">{{ i.vendor_id }}</td>
+			<td style="width: {{ cw.1 }}%;">{{ i.name }}</td>
+			<td style="width: {{ cw.2 }}%;">{{ i.alias }}</td>
+			<td style="width: {{ cw.3 }}%;">{{ i.address }}</td>
+			<td style="width: {{ cw.4 }}%;">{{ i.city }}</td>
+			<td style="width: {{ cw.5 }}%;">{{ i.state }}</td>
+			<td style="width: {{ cw.6 }}%;">{{ i.zip }}</td>
+			<td style="width: {{ cw.7 }}%;">{{ i.firstname }}</td>
+			<td style="width: {{ cw.8 }}%;">{{ i.lastname }}</td>
+			<td style="width: {{ cw.9 }}%;">{{ i.phone }}</td>
+			<td style="width: {{ cw.10 }}%;">{{ i.email }}</td>
+			<td style="width: {{ cw.11 }}%;">{{ i.type }}</td>
+			<td style="width: {{ cw.12 }}%;">{{ i.inactive }}</td>
+			</tr>
+			{% endfor %}
+
+			</tbody>
+		</table>
+		<button type='submit' class='btn btn-primary'>Search</button>
+	</form>
+
+	Count: {{ count }}<br>
+	Cost: {{ total_cost }}<br>
+	Price:{{ total_price }}<br>
+	TPCVC → Transferred, Payables, Credit, Voided, Closed
+
+{% endblock %}

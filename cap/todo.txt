@@ -1,0 +1,14 @@
+Rebuild PO links on importing of log or PO
+
+Future:
+
+	Export Vendor to save alias fields.
+
+	Detect possible fraud.
+	changing CC, PO foreign keys.
+	Charged PO going void.
+	Linked list add status.
+		PO Price - CC Amount
+
+	Filter on status.
+	Filter on linked CC or PO.

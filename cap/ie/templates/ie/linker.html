@@ -1,0 +1,28 @@
+{% extends "cc/boot.html" %}
+{% block content %}
+
+<form method='post' enctype="multipart/form-data">
+	{% csrf_token %}
+
+	<p>Link Assistant:
+		<div>
+			<input type="radio" id="1" name="link" value="1">
+			<label for="user">Reset Log[ CC Foreign Key ] ( Required if CC transactions are deleted )</label><br>
+
+			<input type="radio" id="2" name="link" value="2">
+			<label for="log">Reset Log [ PO ManyToMany Key ] ( Required if PO are deleted ) </label><br>
+
+			<input type="radio" id="3" name="link" value="3">
+			<label for="po">Clear CC [ log_id ] Links</label><br>
+
+			<input type="radio" id="4" name="link" value="4">
+			<label for="cc">Mark CC [ log_id ] Links ( Required if CC transactions were deleted )</label><br>
+
+		</div>
+	</p>
+  <button type='submit'>Link It</button>
+</form>
+{% for key, value in result.items %}
+	{{ key }}: {{ value }}<br>
+{% endfor %}
+{% endblock %}

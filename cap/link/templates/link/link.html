@@ -1,0 +1,20 @@
+{% extends "cc/boot.html" %}
+{% block content %}
+
+<h1>Link</h1>
+
+<form method='post' enctype="multipart/form-data">
+	{% csrf_token %}
+
+	<p>Credit card → Log Link Assistant:
+		<div>
+			<input type="text" id="cc_days_back" name="cc_days_back" value="15">
+			<label for="cc_days_back">CC Days Back</label><br>
+
+			<input type="text" id="offset_days" name="offset_days" value="15">
+			<label for="offset_days">Offset Days</label><br>
+		</div>
+	</p>
+  <button type='submit'>Link → It</button>
+</form>
+{% endblock %}
