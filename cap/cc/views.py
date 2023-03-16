@@ -15,16 +15,17 @@ from django.contrib.auth.models import User, Group
 def home( request ):
 	# print( f'{ datetime.datetime.now() } { request.user.username }' )
 	print( f'{ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") } { request.user }' )
+	# print( request.__dict__ )
 	# print('New Log in')
 	# if request.user.username == 'ghost':
 	# 	send_email( 'BEAR CAP Log In', 'Ghost has entered the CAP' )
 
 	return render( request, 'cc/welcome.html', {} )
-	
+
 
 # def view2( request ):
 # 	print( f'{ datetime.datetime.now() } { request.user }' )
-# 	return HttpResponse( 'Cool Dude')	
+# 	return HttpResponse( 'Cool Dude')
 
 
 def view( request ):

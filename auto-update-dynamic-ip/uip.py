@@ -33,13 +33,13 @@ def update_ip(file_name, wan_ip):
     f.close()
     print(f'Saved new ip: {wan_ip}')
 
-def upload_file(ftp, remote, file_name):
+def upload_file(ftp, remote, path_file_name, file_name):
     ftp.cwd( remote )
-    ftp.storbinary('STOR ' + file_name, open(file_name, 'rb'))
+    ftp.storbinary('STOR ' + file_name, open(path_file_name, 'rb'))
     print(f'Uploaded: {file_name}')
 
 
-def ftp(remote, file_name):
+def ftp(remote, path_file_name, file_name):
     ftp = None
     try:
         print(ftp_host)
@@ -48,7 +48,7 @@ def ftp(remote, file_name):
         # login_code = login_code.split()
         print(login_code)
         # login_code = login_code[0]
-        upload_file(ftp, remote, file_name)
+        upload_file(ftp, remote, path_file_name, file_name)
         ftp.quit()
 
     except Exception as e:
@@ -68,5 +68,5 @@ if __name__ == '__main__':
 
     if last_ip != wan_ip:
         update_ip(path_file_name, wan_ip)
-        base_path_remote = '/bayrvs/capip'
-        ftp(base_path_remote, file_name)
+        base_path_remote = '/bayrvs/link'
+        ftp(base_path_remote, path_file_name, file_name)   # This works when manually testing but crontab does not have the same pwd so you need to include the path.
