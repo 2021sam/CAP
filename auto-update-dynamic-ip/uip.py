@@ -61,24 +61,22 @@ def ftp(remote, path_file_name, file_name):
         print( '.', end='' )
 
 
-def check_local_ip():
+def local_ip_alive():
     response = requests.get('http://10.0.0.124:9009/alive')
-    # print(response.json())
     alive = response.json()['alive']
     # print(f'alive: {alive}')
     return alive
 
-def check_port_forwarding(wan_ip):
+def port_forwarding(wan_ip):
     url = f'http://{wan_ip}'
-    r = False
     try:
         r = requests.get(url, params={})
     except requests.exceptions.RequestException as e:
         print(e)
-        return True
+        return False
 
-    print(r.status_code)
-    return r.status_code
+    if r.status_code == 200:
+        return True
 
 
 def notify(subject, body):
@@ -122,10 +120,10 @@ if __name__ == '__main__':
         base_path_remote = '/bayrvs/link'
         ftp(base_path_remote, path_file_name, file_name)   # This works when manually testing but crontab does not have the same pwd so you need to include the path.
 
-    status = check_local_ip()
+    status = local_ip_alive()
     if not status:
         notify('CAP ALERT', 'Server has relocated to new local IP.')
 
-    status = check_port_forwarding(wan_ip)
+    status = port_forwarding(wan_ip)
     if not status:
         notify('CAP ALERT', 'Router is denied port forwarding.')
