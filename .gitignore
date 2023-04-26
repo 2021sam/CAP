@@ -1,7 +1,7 @@
 *__pycache__*
 credentials.py
 ip.txt
-ip_log.txt
+auto-update-dynamic-ip/ip_log.txt
 reboot_log.txt
 
 **/migrations
