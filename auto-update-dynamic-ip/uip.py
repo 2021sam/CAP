@@ -9,7 +9,7 @@ from pathlib import Path
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from ftplib import FTP, error_perm
-from credentials import server_email_address, server_email_password, recipients, ftp_host, ftp_user, ftp_password
+from credentials import server_ip, server_email_address, server_email_password, recipients, ftp_host, ftp_user, ftp_password
 # find . -name 'ip.txt'
 
 
@@ -62,7 +62,9 @@ def ftp(remote, path_file_name, file_name):
 
 
 def local_ip_alive():
-    response = requests.get('http://10.0.0.124:9009/alive')
+    # Test if server changed local ip
+    url = f'http://{server_ip}:9009/alive'
+    response = requests.get(url)
     alive = response.json()['alive']
     # print(f'alive: {alive}')
     return alive
@@ -119,6 +121,7 @@ if __name__ == '__main__':
         update_ip(path_file_name, wan_ip)
         base_path_remote = '/bayrvs/link'
         ftp(base_path_remote, path_file_name, file_name)   # This works when manually testing but crontab does not have the same pwd so you need to include the path.
+        notify('CAP ALERT', 'CAP Server has new WAN IP.')
 
     status = local_ip_alive()
     if not status:
