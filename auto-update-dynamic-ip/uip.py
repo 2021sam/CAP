@@ -1,13 +1,16 @@
-from pathlib import Path
-from requests import get
 import os
-import sys, time, ftplib
+import sys
+import json
+import time
+import ftplib
+import requests
 import smtplib
+from pathlib import Path
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from ftplib import FTP, error_perm
-from credentials_ftp import server_email_address, server_email_password, recipients, ftp_host, ftp_user, ftp_password
-
+from credentials import server_email_address, server_email_password, recipients, ftp_host, ftp_user, ftp_password
+# find . -name 'ip.txt'
 
 
 def get_last_known_ip(path_file_name):
@@ -23,7 +26,7 @@ def get_last_known_ip(path_file_name):
         return ip
 
 def get_wan_ip():
-    ip = get('https://api.ipify.org').content.decode('utf8')
+    ip = requests.get('https://api.ipify.org').content.decode('utf8')
     print(f'Live ip: {ip}')
     return ip
 
@@ -58,6 +61,54 @@ def ftp(remote, path_file_name, file_name):
         print( '.', end='' )
 
 
+def check_local_ip():
+    response = requests.get('http://10.0.0.124:9009/alive')
+    # print(response.json())
+    alive = response.json()['alive']
+    # print(f'alive: {alive}')
+    return alive
+
+def check_port_forwarding(wan_ip):
+    url = f'http://{wan_ip}'
+    r = False
+    try:
+        r = requests.get(url, params={})
+    except requests.exceptions.RequestException as e:
+        print(e)
+        return True
+
+    print(r.status_code)
+    return r.status_code
+
+
+def notify(subject, body):
+    from email.mime.text import MIMEText
+    from email.mime.multipart import MIMEMultipart
+
+    print('notify')
+    msg = MIMEMultipart()
+    msg['From'] = server_email_address
+    msg['To'] =  ", ".join( recipients )
+    msg['Subject'] = 'location' + ': ' + subject
+    msg.attach(MIMEText(body, 'plain'))
+    text = msg.as_string()
+
+    try:
+        email_server = smtplib.SMTP('smtp.gmail.com', 587)
+        email_server.starttls()
+        email_server.login(server_email_address, server_email_password)
+        email_server.sendmail(server_email_address, recipients, text)
+
+    except Exception as e:
+        print( e )
+        log_event	( f'Exception Thrown - Send mail - {e}')
+
+    finally:
+        email_server.quit()
+
+
+
+
 if __name__ == '__main__':
     # path = str(Path.cwd())
     path = '/home/x/CAP/auto-update-dynamic-ip'
@@ -70,3 +121,11 @@ if __name__ == '__main__':
         update_ip(path_file_name, wan_ip)
         base_path_remote = '/bayrvs/link'
         ftp(base_path_remote, path_file_name, file_name)   # This works when manually testing but crontab does not have the same pwd so you need to include the path.
+
+    status = check_local_ip()
+    if not status:
+        notify('CAP ALERT', 'Server has relocated to new local IP.')
+
+    status = check_port_forwarding(wan_ip)
+    if not status:
+        notify('CAP ALERT', 'Router is denied port forwarding.')
