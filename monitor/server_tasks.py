@@ -111,7 +111,7 @@ def notify(subject, body):
 
 if __name__ == '__main__':
     # path = str(Path.cwd())
-    path = '/home/x/CAP/auto-update-dynamic-ip'
+    path = '/home/x/CAP/monitor'
     file_name = 'ip.txt'
     path_file_name = Path(path, file_name)
     last_ip = get_last_known_ip(path_file_name)

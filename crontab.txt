@@ -26,11 +26,10 @@
 #	Server
 # @reboot date >> /home/x/CAP/reboot_log.txt
 # @reboot sleep 10 && /home/x/CAP/cap.sh
-
-#*/2 * * * * date >> /home/x/CAP/auto-update-dynamic-ip/ip_log.txt
-#*/2 * * * * sudo python /home/x/CAP/auto-update-dynamic-ip/uip.py
+#*/2 * * * * date >> /home/x/CAP/monitor/ip_log.txt
+#*/2 * * * * sudo python /home/x/CAP/monitor/server_tasks.py
 
 
 #	Monitor
-* * * * * date >> /home/x/CAP/auto-update-dynamic-ip/monitor_log.txt
-* * * * * sudo python /home/x/CAP/auto-update-dynamic-ip/monitor.py
+* * * * * date >> /home/x/CAP/monitor/monitor_log.txt
+* * * * * sudo python /home/x/CAP/monitor/monitor_tasks.py
