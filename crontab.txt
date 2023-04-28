@@ -20,11 +20,17 @@
 # 
 # For more information see the manual pages of crontab(5) and cron(8)
 # 
-
-@reboot date >> /home/x/CAP/reboot_log.txt
-@reboot sleep 10 && /home/x/CAP/cap.sh
-
-
 # m h  dom mon dow   command
-*/2 * * * * date >> /home/x/CAP/auto-update-dynamic-ip/ip_log.txt
-*/2 * * * * sudo python /home/x/CAP/auto-update-dynamic-ip/uip.py
+
+
+#	Server
+# @reboot date >> /home/x/CAP/reboot_log.txt
+# @reboot sleep 10 && /home/x/CAP/cap.sh
+
+#*/2 * * * * date >> /home/x/CAP/auto-update-dynamic-ip/ip_log.txt
+#*/2 * * * * sudo python /home/x/CAP/auto-update-dynamic-ip/uip.py
+
+
+#	Monitor
+* * * * * date >> /home/x/CAP/auto-update-dynamic-ip/monitor_log.txt
+* * * * * sudo python /home/x/CAP/auto-update-dynamic-ip/monitor.py
