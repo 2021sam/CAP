@@ -3,6 +3,8 @@ credentials.py
 ip.txt
 auto-update-dynamic-ip/ip_log.txt
 reboot_log.txt
+ip_log.txt
+monitor_log.txt
 
 **/migrations
 *.DS_Store
