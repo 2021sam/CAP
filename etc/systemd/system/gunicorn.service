@@ -1,0 +1,23 @@
+# https://docs.gunicorn.org/en/latest/settings.html#logging
+# https://docs.gunicorn.org/en/latest/deploy.html
+
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+Type=notify
+# the specific user that our service will run as
+User=pi
+Group=www-data
+# RuntimeDirectory=gunicorn
+WorkingDirectory=/home/pi/CAP/cap
+ExecStart=/home/pi/CAP/env/bin/gunicorn cap.wsgi:application
+# ExecReload=/bin/kill -s HUP $MAINPID
+# KillMode=mixed
+# TimeoutStopSec=5
+# PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
