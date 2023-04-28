@@ -93,7 +93,7 @@ def click( x, y ):
 
 
 def setup():
-	driver.get( c.url )
+	driver.get( c.bank_url )
 	time.sleep( 2 )
 	zoom_out( 5 )
 
@@ -210,7 +210,7 @@ def update_cap():
 	driver.find_element_by_xpath('//button[contains(text(), "Welcome")]').click()
 
 	time.sleep( 1 )
-	driver.get( f'http://{server_ip}:{server_port}/ie/upload' )
+	driver.get( f'http://{wan_server_ip}:{server_port}/ie/upload' )
 	time.sleep( 2 )
 	# driver.find_element_by_xpath('//button[contains(text(), "Choose File")]').click()
 
@@ -245,15 +245,10 @@ def log():
 
 def notify(type, subject, body):
 	print('notify')
-	# recipients2 = []
 	recipients = c.recipients
-	# if type == 0:
-	# 	recipients2 = []
-
 	msg = MIMEMultipart()
 	msg['From'] = c.server_email_address
 	msg['To'] =  ", ".join( c.recipients )
-	# msg['To'] =  ", ".join( recipients2 )
 	# print('body = {}'.format( body ))
 	msg['Subject'] = subject
 	msg.attach(MIMEText(body, 'plain'))
@@ -334,7 +329,7 @@ def link():
 	global driver
 
 	driver = webdriver.Chrome( executable_path = '/usr/lib/chromium-browser/chromedriver' )
-	driver.get( f'http://{server_ip}:{cap_server_port}/link/auto' )
+	driver.get( f'http://{wan_server_ip}:{cap_server_port}/link/auto' )
 	time.sleep( 10 )
 	results = driver.find_element_by_id('results')
 	print( results.text )
