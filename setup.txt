@@ -1,0 +1,6 @@
+SystemD
+
+https://www.freedesktop.org/software/systemd/man/systemd.service.html
+
+
+https://unix.stackexchange.com/questions/686827/how-does-gunicorn-knows-how-to-connect-to-systemd-socket
