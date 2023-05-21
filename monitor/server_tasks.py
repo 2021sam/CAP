@@ -61,26 +61,6 @@ def ftp(remote, path_file_name, file_name):
         print( '.', end='' )
 
 
-def local_ip_alive():
-    # Test if server changed local ip
-    url = f'http://{server_ip}:9009/alive'
-    response = requests.get(url)
-    alive = response.json()['alive']
-    # print(f'alive: {alive}')
-    return alive
-
-def port_forwarding(wan_ip):
-    url = f'http://{wan_ip}'
-    try:
-        r = requests.get(url, params={})
-    except requests.exceptions.RequestException as e:
-        print(e)
-        return False
-
-    if r.status_code == 200:
-        return True
-
-
 def notify(subject, body):
     from email.mime.text import MIMEText
     from email.mime.multipart import MIMEMultipart
@@ -108,7 +88,6 @@ def notify(subject, body):
 
 
 
-
 if __name__ == '__main__':
     # path = str(Path.cwd())
     path = '/home/x/CAP/monitor'
@@ -122,11 +101,3 @@ if __name__ == '__main__':
         base_path_remote = '/bayrvs/link'
         ftp(base_path_remote, path_file_name, file_name)   # This works when manually testing but crontab does not have the same pwd so you need to include the path.
         notify('CAP ALERT', 'CAP Server has new WAN IP.')
-
-    status = local_ip_alive()
-    if not status:
-        notify('CAP ALERT', 'Server has relocated to new local IP.')
-
-    status = port_forwarding(wan_ip)
-    if not status:
-        notify('CAP ALERT', 'Router is denied port forwarding.')
