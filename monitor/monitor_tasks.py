@@ -35,19 +35,16 @@ def local_ip_alive():
     return alive
 
 def port_forwarding(wan_ip):
-    # url = f'http://{wan_ip}'
     url = f'http://{wan_ip}:{c.server_port}/alive'
+    print(url)
     r = None
     try:
         r = requests.get(url, params={})
     except requests.exceptions.RequestException as e:
         print(e)
         return False
-
-    # if r.status_code == 200:
-    #     return True
     alive = r.json()['alive']
-    print(f'wan ip -> port forwarding alive: {alive}')
+    print(f'server wan ip -> port forwarding alive: {alive}')
     return alive
 
 
@@ -58,7 +55,7 @@ def notify(subject, body):
     print('notify')
     msg = MIMEMultipart()
     msg['From'] = c.server_email_address
-    msg['To'] =  ", ".join( c.recipients )
+    msg['To'] =  ", ".join(c.recipients)
     msg['Subject'] = 'location' + ': ' + subject
     msg.attach(MIMEText(body, 'plain'))
     text = msg.as_string()
@@ -79,10 +76,18 @@ def notify(subject, body):
 
 if __name__ == '__main__':
     wan_ip = get_wan_ip()
+    print(wan_ip)
     alive = local_ip_alive()
     if not alive:
         notify('CAP ALERT', 'Server is MIA.')
 
     alive = port_forwarding(wan_ip)
     if not alive:
-        notify('CAP ALERT', 'Router denied port forwarding.')
+        url = f'http://{wan_ip}:{c.server_port}/alive'
+        message = f'Router denied port forwarding:\n' \
+        f'code: monitor_tasks.py\n' \
+        f'wan ip: {wan_ip}\n' \
+        f'server_ip: {c.server_ip}\n' \
+        f'server_port: {c.server_port}\n' \
+        f'api url: {url}\n'
+        notify('CAP ALERT', message)
