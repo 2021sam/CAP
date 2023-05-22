@@ -101,6 +101,7 @@ if __name__ == '__main__':
         base_path_remote = '/bayrvs/link'
         ftp(base_path_remote, path_file_name, file_name)   # This works when manually testing but crontab does not have the same pwd so you need to include the path.
         message = f'CAP Server has a new WAN IP:\n' \
+                f'code: server_tasks.py\n' \
                 f'previous IP: {last_ip}' \
                 f'new IP: {wan_ip}'
         notify('CAP ALERT', message)
