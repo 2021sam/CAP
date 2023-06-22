@@ -108,19 +108,17 @@ if __name__ == '__main__':
     last_ip = get_last_known_ip(path_file_name)
     # print('98')
     wan_ip = get_wan_ip()
-
-    if wan_ip == 'Bad Gateway':
-        exit()
     print(f'wan_ip: {wan_ip}')
-    if wan_ip:
-        if last_ip != wan_ip:
-            print('103')
+    if not wan_ip or wan_ip == 'Bad Gateway':
+        exit()
 
-            update_ip(path_file_name, wan_ip)
-            base_path_remote = '/bayrvs/link'
-            ftp(base_path_remote, path_file_name, file_name)   # This works when manually testing but crontab does not have the same pwd so you need to include the path.
-            message = f'CAP Server has a new WAN IP:\n' \
-                    f'code: server_tasks.py\n' \
-                    f'previous IP: {last_ip}\n' \
-                    f'new IP: {wan_ip}'
-            notify('CAP ALERT', message)
+    if last_ip != wan_ip:
+        print('103')
+        update_ip(path_file_name, wan_ip)
+        base_path_remote = '/bayrvs/link'
+        ftp(base_path_remote, path_file_name, file_name)   # This works when manually testing but crontab does not have the same pwd so you need to include the path.
+        message = f'CAP Server has a new WAN IP:\n' \
+                f'code: server_tasks.py\n' \
+                f'previous IP: {last_ip}\n' \
+                f'new IP: {wan_ip}'
+        notify('CAP ALERT', message)
