@@ -26,7 +26,18 @@ def get_last_known_ip(path_file_name):
         return ip
 
 def get_wan_ip():
-    ip = requests.get('https://api.ipify.org').content.decode('utf8')
+    ip = None
+    try:
+        print('******************************************')
+        ip = requests.get('https://api.ipify.org', timeout=3000).content.decode('utf8')
+        print('My public IP address is: {}'.format(ip))
+    except Exception as e:
+        print('get_wan_ip() exception error:')
+        print(e)
+        print('Solution: restart computer')
+        message = 'Not able to get WAN --> possible new WAN --> reboot server.'
+        notify('CAP ALERT', message)
+
     print(f'Live ip: {ip}')
     return ip
 
@@ -93,10 +104,18 @@ if __name__ == '__main__':
     path = '/home/x/CAP/monitor'
     file_name = 'ip.txt'
     path_file_name = Path(path, file_name)
+    # print('96')
     last_ip = get_last_known_ip(path_file_name)
+    # print('98')
     wan_ip = get_wan_ip()
-    if wan_ip != 'Bad Gateway':
+
+    if wan_ip == 'Bad Gateway':
+        exit()
+    print(f'wan_ip: {wan_ip}')
+    if wan_ip:
         if last_ip != wan_ip:
+            print('103')
+
             update_ip(path_file_name, wan_ip)
             base_path_remote = '/bayrvs/link'
             ftp(base_path_remote, path_file_name, file_name)   # This works when manually testing but crontab does not have the same pwd so you need to include the path.
