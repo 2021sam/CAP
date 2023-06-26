@@ -76,7 +76,10 @@ def notify(subject, body):
 
 if __name__ == '__main__':
     wan_ip = get_wan_ip()
-    print(wan_ip)
+    print(f'wan_ip: {wan_ip}')
+    if not wan_ip or wan_ip == 'Bad Gateway':
+        exit()
+
     alive = local_ip_alive()
     if not alive:
         notify('CAP ALERT', 'Server is MIA.')
